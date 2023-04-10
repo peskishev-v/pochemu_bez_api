@@ -1,0 +1,47 @@
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
+
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+public class dz_02_2 {
+  public static void main(String[] args) {
+
+    String begin = new String("select * from students where ");
+
+    JSONParser parser = new JSONParser();
+
+    try (Reader reader = new FileReader("filterstring.json")) {
+      JSONObject jsonObject = (JSONObject) parser.parse(reader);
+
+      System.out.printf("Filter: %s\n", jsonObject);
+
+      String sb = createString(begin, jsonObject);
+
+      System.out.printf("Rezult: %s\n", sb);
+
+    } catch (IOException e) {
+      e.printStackTrace();
+    } catch (ParseException e) {
+      e.printStackTrace();
+    }
+  }
+
+  static String createString(String begin, JSONObject jsonObject) {
+    StringBuilder sb = new StringBuilder(begin);
+
+    for (Object key : jsonObject.keySet()) {
+      String keyStr = (String) key;
+      String keyvalue = (String) jsonObject.get(keyStr);
+
+      if (!keyvalue.equals("Null")) {
+        sb.append(keyStr + " = '" + keyvalue + "' and ");
+      }
+    }
+    sb.delete(sb.lastIndexOf("and"), sb.length());
+
+    return sb.toString();
+  }
+}

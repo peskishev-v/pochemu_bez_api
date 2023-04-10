@@ -1,0 +1,21 @@
+import java.io.IOException;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+public class dz_02_1 {
+  public static void main(String[] args) throws IOException {
+
+    // Path dir = Path.of("C:\\Program Files\\Java\\jdk-11.0.16\\conf\\management",
+    // "//");
+    Path dir = Paths.get("C:\\Program Files\\Java\\jdk-18.0.2.1\\bin\\server");
+    try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir)) {
+      for (Path entry : stream) {
+        String str = entry.toString();
+        String substr = str.substring(str.lastIndexOf('.') + 1);
+        System.out.printf("Расширение файла: %s\n", substr);
+      }
+    }
+  }
+}
